@@ -1,8 +1,10 @@
 package top.lizec.server;
 
 import top.lizec.core.LZApplication;
+import top.lizec.core.annotation.LSTPServer;
 import top.lizec.core.annotation.ReceiveScan;
 
+@LSTPServer
 @ReceiveScan("top.lizec.server.controller")
 public class ChartRoomServerApplication {
     // 从Controller层开始, 就可以按照Spring的模式分割业务逻辑

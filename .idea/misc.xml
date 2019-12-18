@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <list size="2">
-      <item index="0" class="java.lang.String" itemvalue="top.lizec.core.annotation.GetMapping" />
-      <item index="1" class="java.lang.String" itemvalue="top.lizec.core.annotation.ReceiveController" />
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="top.lizec.core.annotation.Automatique" />
+      <item index="1" class="java.lang.String" itemvalue="top.lizec.core.annotation.GetMapping" />
+      <item index="2" class="java.lang.String" itemvalue="top.lizec.core.annotation.PushMapping" />
+      <item index="3" class="java.lang.String" itemvalue="top.lizec.core.annotation.ReceiveController" />
     </list>
+    <writeAnnotations>
+      <writeAnnotation name="top.lizec.core.annotation.Automatique" />
+    </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">

@@ -12,7 +12,7 @@ Content-Type: text/json
 {"result":"success"}
 */
 public class LSTPEntityResponse {
-    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH-mm-ss");
 
     private String protocol;
     private String code;
@@ -33,7 +33,7 @@ public class LSTPEntityResponse {
         this.body = body;
     }
 
-    LSTPEntityResponse parseFrom(String response) {
+    public static LSTPEntityResponse parseFrom(String response) {
         LSTPEntityResponse lstpEntityResponse = new LSTPEntityResponse();
         String[] entity = response.split("\n\n");
         if (entity.length != 2) {
@@ -47,6 +47,7 @@ public class LSTPEntityResponse {
         String[] arg = lines[0].split(" ");
 
         if (arg.length != 2) {
+            System.out.println(response);
             throw new IllegalArgumentException("LSTP请求格式错误");
         }
         lstpEntityResponse.protocol = arg[0];
@@ -55,6 +56,7 @@ public class LSTPEntityResponse {
         for (int i = 1; i < lines.length; i++) {
             String[] info = lines[i].split(":");
             if (info.length != 2) {
+                System.out.println(response);
                 throw new IllegalArgumentException("LSTP请求格式错误");
             }
 
@@ -80,5 +82,29 @@ public class LSTPEntityResponse {
                 "Content-Type:" + contentType + "\n" +
                 "\n" +
                 body;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public String getBody() {
+        return body;
     }
 }

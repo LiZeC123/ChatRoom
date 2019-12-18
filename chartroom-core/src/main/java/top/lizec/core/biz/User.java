@@ -1,4 +1,4 @@
-package top.lizec.core.entity;
+package top.lizec.core.biz;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

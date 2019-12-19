@@ -2,6 +2,7 @@ package top.lizec.core;
 
 import org.reflections.Reflections;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -13,12 +14,14 @@ import java.util.Set;
 import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.AutomatiqueScan;
 import top.lizec.core.annotation.GetMapping;
+import top.lizec.core.annotation.LSTPClient;
 import top.lizec.core.annotation.LSTPServer;
 import top.lizec.core.annotation.PushController;
 import top.lizec.core.annotation.ReceiveController;
 import top.lizec.core.annotation.RequestController;
 import top.lizec.core.lstp.LSTPReceive;
 import top.lizec.core.proxy.PushProxy;
+import top.lizec.core.proxy.PushSocketManager;
 import top.lizec.core.proxy.RequestProxy;
 
 public class LZApplication {
@@ -35,10 +38,19 @@ public class LZApplication {
     // 3. ServerSocket类, 服务器端需要这个类监听请求, 以及群发任务
     //      - 显然群发任务需要持有全部的Socket, 因此只能由这个类完成
 
+    // 1. 服务器端启动推送ServerSocket, 接收客户端的请求
+    // 2. 将客户端的请求Socket注入到相应的代理中
+    // 3. 代理根据需要发送消息
+
+    // 1. 客户端启动接收推送的Socket
+    // 2. 将Socket绑定到Receive之中
+    // 3. 收到消息时, 调用相应的方法
+
 
     private HashMap<String, Object> pathController = new HashMap<>();
     private HashMap<String, Method> pathMethod = new HashMap<>();
     private HashMap<Class<?>, Object> automatiqueList = new HashMap<>();
+    private PushSocketManager manager = new PushSocketManager();
 
     public static void run(Class app) {
         new LZApplication().runApp(app);
@@ -46,7 +58,6 @@ public class LZApplication {
 
     private void runApp(Class app) {
         System.out.println("LZApplication");
-        //System.out.println(app);
 
         String autoScanPackage;
         for (Annotation annotation : app.getAnnotations()) {
@@ -65,6 +76,10 @@ public class LZApplication {
 
         if (null != app.getAnnotation(LSTPServer.class)) {
             startServerSocket();
+        }
+
+        if (null != app.getAnnotation(LSTPClient.class)) {
+            startClientSocket();
         }
     }
 
@@ -120,7 +135,7 @@ public class LZApplication {
         Set<Class<?>> set = reflections.getTypesAnnotatedWith(PushController.class);
 
         for (Class<?> controller : set) {
-            PushProxy proxy = new PushProxy("chartroom", "");
+            PushProxy proxy = new PushProxy("chartroom", "", manager);
             Object ins = proxy.newInstall(controller);
             automatiqueList.put(controller, ins);
         }
@@ -168,10 +183,22 @@ public class LZApplication {
                 ServerSocket serverSocket = new ServerSocket(8846);
                 while (true) {
                     Socket socket = serverSocket.accept();
-                    // 创建一个类收集socket, 当调用推送方法时, 向所有的socket推送
-                    //new LSTPReceive(socket, pathController, pathMethod);
+                    System.out.println("推送Server线程收到新的Socket");
+                    manager.addSocket(socket);
                 }
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void startClientSocket() {
+        new Thread(() -> {
+            try {
+                System.out.println("启动消息推送接收线程");
+                Socket socket = new Socket("localhost", 8846);
+                new LSTPReceive(socket, pathController, pathMethod);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();

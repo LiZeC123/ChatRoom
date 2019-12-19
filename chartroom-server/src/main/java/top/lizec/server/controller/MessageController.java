@@ -12,8 +12,9 @@ public class MessageController {
     @Automatique
     private MessagePush messagePush;
 
-    @GetMapping("add")
-    String addMessage(Message message) {
+    @GetMapping("/add")
+    public String addMessage(Message message) {
+        System.out.println("Server Receive Message:" + message);
         messagePush.pushMessage(message);
         return "Success";
     }

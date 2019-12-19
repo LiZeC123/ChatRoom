@@ -50,6 +50,8 @@ public class LSTPReceive {
                     while (!Thread.interrupted()) {
                         // 可以直接将报文封装成String, 然后发送和接受String
                         String info = in.readUTF();
+                        System.out.println("Received Request:");
+                        System.out.println(info);
                         LSTPEntityRequest request = LSTPEntityRequest.parseFrom(info);
                         if (receiver.containsKey(request.getPath())) {
                             Object ins = receiver.get(request.getPath());

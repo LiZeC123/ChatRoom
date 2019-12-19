@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface PushMapping {
-    String value();
+@Target(ElementType.TYPE)
+public @interface LSTPClient {
+    String value() default "LSTP";
 }

@@ -6,6 +6,7 @@ import top.lizec.core.biz.Message;
 
 @PushController
 public interface MessagePush {
-    @PushMapping
+
+    @PushMapping("/push/message")
     void pushMessage(Message message);
 }

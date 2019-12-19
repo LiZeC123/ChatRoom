@@ -13,16 +13,19 @@ import java.util.Set;
 
 import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.AutomatiqueScan;
+import top.lizec.core.annotation.Component;
 import top.lizec.core.annotation.GetMapping;
 import top.lizec.core.annotation.LSTPClient;
 import top.lizec.core.annotation.LSTPServer;
 import top.lizec.core.annotation.PushController;
 import top.lizec.core.annotation.ReceiveController;
 import top.lizec.core.annotation.RequestController;
-import top.lizec.core.lstp.LSTPReceive;
+import top.lizec.core.proxy.Context;
+import top.lizec.core.proxy.LSTPReceive;
 import top.lizec.core.proxy.PushProxy;
 import top.lizec.core.proxy.PushSocketManager;
 import top.lizec.core.proxy.RequestProxy;
+import top.lizec.core.proxy.UserThread;
 
 public class LZApplication {
     // 服务器端只需要群发消息, 客户端需要请求服务器端, 需要这个接口
@@ -53,10 +56,14 @@ public class LZApplication {
     private PushSocketManager manager = new PushSocketManager();
 
     public static void run(Class app) {
-        new LZApplication().runApp(app);
+        new LZApplication().runApp(app, null);
     }
 
-    private void runApp(Class app) {
+    public static void run(Class app, UserThread mainThread) {
+        new LZApplication().runApp(app, mainThread);
+    }
+
+    private void runApp(Class app, UserThread mainThread) {
         System.out.println("LZApplication");
 
         String autoScanPackage;
@@ -67,7 +74,8 @@ public class LZApplication {
                     scanReceive(autoScanPackage);
                     scanRequest(autoScanPackage);
                     scanPush(autoScanPackage);
-                    scanComponent();
+                    scanComponent(autoScanPackage);
+                    autoSetComponent();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -80,6 +88,24 @@ public class LZApplication {
 
         if (null != app.getAnnotation(LSTPClient.class)) {
             startClientSocket();
+        }
+
+        final Context context = new Context(automatiqueList, manager);
+        if (null != mainThread) {
+            System.out.println("启动用户主线程");
+            new Thread(() -> mainThread.run(context)).start();
+        }
+    }
+
+    private void scanComponent(String scanPackage) throws IllegalAccessException, InstantiationException {
+        Reflections reflections = new Reflections(scanPackage);
+        Set<Class<?>> set = reflections.getTypesAnnotatedWith(Component.class);
+        for (Class<?> controller : set) {
+            for (Annotation annotation : controller.getAnnotations()) {
+                if (annotation instanceof Component) {
+                    automatiqueList.put(controller, controller.newInstance());
+                }
+            }
         }
     }
 
@@ -112,7 +138,7 @@ public class LZApplication {
         }
     }
 
-    private void scanRequest(String scanPackage) {
+    private void scanRequest(String scanPackage) throws IOException {
         Reflections reflections = new Reflections(scanPackage);
         Set<Class<?>> set = reflections.getTypesAnnotatedWith(RequestController.class);
         String prefix = "";
@@ -141,7 +167,7 @@ public class LZApplication {
         }
     }
 
-    private void scanComponent() throws Exception {
+    private void autoSetComponent() throws Exception {
         for (Class<?> clazz : automatiqueList.keySet()) {
             System.out.println("automatiqueList:" + clazz);
             for (Field field : clazz.getDeclaredFields()) {
@@ -197,7 +223,7 @@ public class LZApplication {
             try {
                 System.out.println("启动消息推送接收线程");
                 Socket socket = new Socket("localhost", 8846);
-                new LSTPReceive(socket, pathController, pathMethod);
+                new LSTPReceive(socket, pathController, pathMethod, true);
             } catch (IOException e) {
                 e.printStackTrace();
             }

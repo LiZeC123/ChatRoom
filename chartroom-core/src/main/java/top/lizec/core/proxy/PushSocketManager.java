@@ -9,20 +9,19 @@ import top.lizec.core.entity.LSTPEntityRequest;
 import top.lizec.core.entity.LSTPEntityResponse;
 
 public class PushSocketManager {
-    private final List<BasicObjectSocket> sockets = new ArrayList<>();
+    private final List<ObjectSocket> sockets = new ArrayList<>();
 
     public void addSocket(Socket socket) throws IOException {
-        sockets.add(new BasicObjectSocket(socket));
+        sockets.add(new ObjectSocket(socket));
     }
 
     void pushMessage(LSTPEntityRequest request) {
         String strRequest = request.toString();
-        for (BasicObjectSocket socket : sockets) {
+        for (ObjectSocket socket : sockets) {
             synchronized (sockets) {
                 try {
-                    socket.getOut().writeUTF(strRequest);
-                    socket.getOut().flush();
-                    LSTPEntityResponse.parseFrom(socket.getIn().readUTF());
+                    socket.writeUTF(strRequest);
+                    LSTPEntityResponse.parseFrom(socket.readUTF());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

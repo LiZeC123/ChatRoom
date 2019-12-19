@@ -6,8 +6,6 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -18,8 +16,6 @@ public class PushProxy implements MethodInterceptor {
     private static final ObjectMapper mapper = new ObjectMapper();
     private String serverName;
     private String prefixPath;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
     private PushSocketManager manager;
 
     public PushProxy(String serverName, String prefixPath, PushSocketManager manager) {

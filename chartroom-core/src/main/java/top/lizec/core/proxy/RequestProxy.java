@@ -7,8 +7,6 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.Socket;
@@ -21,29 +19,16 @@ public class RequestProxy implements MethodInterceptor {
     private static final ObjectMapper mapper = new ObjectMapper();
     private String serverName;
     private String prefixPath;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
+    private ObjectSocket socket;
 
-    public RequestProxy(String serverName, String prefixPath) {
+    public RequestProxy(String serverName, String prefixPath) throws IOException {
         this.serverName = serverName;
         this.prefixPath = prefixPath;
-
+        this.socket = new ObjectSocket(new Socket("localhost", 8848));
     }
 
     public Object newInstall(Class<?> clazz) {
         return Enhancer.create(clazz, this);
-    }
-
-    private void initSocket() throws IOException {
-        if (this.out == null) {
-            synchronized (this) {
-                if (this.out == null) {
-                    Socket socket = new Socket("localhost", 8848);
-                    this.out = new ObjectOutputStream(socket.getOutputStream());
-                    this.in = new ObjectInputStream(socket.getInputStream());
-                }
-            }
-        }
     }
 
     @Override
@@ -51,16 +36,12 @@ public class RequestProxy implements MethodInterceptor {
         String path;
         for (Annotation declaredAnnotation : method.getDeclaredAnnotations()) {
             if (declaredAnnotation instanceof GetMapping) {
-                // 第一次使用的时候才初始化Socket
-                initSocket();
                 path = prefixPath + ((GetMapping) declaredAnnotation).value();
 
                 LSTPEntityRequest request = LSTPEntityRequest.createGetWith(path, mapper.writeValueAsString(objects[0]));
+                socket.writeUTF(request.toString());
+                String result = socket.readUTF();
 
-                out.writeUTF(request.toString());
-                out.flush();
-
-                String result = in.readUTF();
                 LSTPEntityResponse response = LSTPEntityResponse.parseFrom(result);
                 return mapper.readValue(response.getBody(), method.getReturnType());
             }

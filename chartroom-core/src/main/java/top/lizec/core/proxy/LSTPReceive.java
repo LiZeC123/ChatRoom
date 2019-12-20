@@ -76,7 +76,7 @@ public class LSTPReceive {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } while (loopMode);
+            } while (loopMode && !socket.hasClosed());
         }).start();
     }
 

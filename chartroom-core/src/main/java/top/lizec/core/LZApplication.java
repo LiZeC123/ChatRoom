@@ -50,6 +50,8 @@ public class LZApplication {
     // 3. 收到消息时, 调用相应的方法
 
 
+    // 通过 Connect: keep-alive可以决定是否需要持有Socket进行循环
+
     private HashMap<String, Object> pathController = new HashMap<>();
     private HashMap<String, Method> pathMethod = new HashMap<>();
     private HashMap<Class<?>, Object> automatiqueList = new HashMap<>();
@@ -196,7 +198,7 @@ public class LZApplication {
                 ServerSocket serverSocket = new ServerSocket(8848);
                 while (true) {
                     Socket socket = serverSocket.accept();
-                    new LSTPReceive(socket, pathController, pathMethod);
+                    new LSTPReceive(socket, pathController, pathMethod, true);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

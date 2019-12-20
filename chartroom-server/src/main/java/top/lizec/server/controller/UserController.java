@@ -4,25 +4,21 @@ import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.GetMapping;
 import top.lizec.core.annotation.ReceiveController;
 import top.lizec.core.biz.User;
-import top.lizec.server.push.MessagePush;
+import top.lizec.server.biz.UserBiz;
 
 @ReceiveController("/user")
 public class UserController {
-
     @Automatique
-    private MessagePush messagePush;
+    private UserBiz userBiz;
 
     @GetMapping("/signUp")
     public User signUp(User user) {
-        System.out.println(user);
-        //messagePush.pushMessage(new Message());
-        return user;
+        return userBiz.signUp(user);
     }
 
     @GetMapping("/login")
-    public String login() {
-        System.out.println("login");
-        return "Hello World!";
+    public User login(User user) {
+        return userBiz.login(user);
     }
 
     @GetMapping("/online")

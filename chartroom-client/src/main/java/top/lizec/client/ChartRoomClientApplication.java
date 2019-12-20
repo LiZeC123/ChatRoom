@@ -1,5 +1,8 @@
 package top.lizec.client;
 
+import javax.swing.*;
+
+import top.lizec.client.gui.MainWindow;
 import top.lizec.core.LZApplication;
 import top.lizec.core.annotation.AutomatiqueScan;
 import top.lizec.core.annotation.LSTPClient;
@@ -22,8 +25,28 @@ public class ChartRoomClientApplication {
     public static void main(String[] args) {
         LZApplication.run(ChartRoomClientApplication.class, new UserThread() {
             public void run(Context context) {
-                RequestTest test = context.getObjectByType(RequestTest.class);
-                test.doTest();
+                MainWindow mainWindow = context.getObjectByType(MainWindow.class);
+                JFrame jFrame = new JFrame("Test");
+                jFrame.setContentPane(mainWindow.getMainPanel());
+                jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                jFrame.pack();
+                jFrame.setVisible(true);
+//
+//
+//                Random random = new Random();
+//
+//                MessageRequester requester = context.getObjectByType(MessageRequester.class);
+//                for(int i=0;i<100;i++){
+//                    Message message = new Message();
+//                    message.setUsername("LiZeC");
+//                    message.setContent("Text<"+i+">: This is a message!");
+//                    try {
+//                        Thread.sleep((long) (2000*random.nextFloat()));
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    requester.addMessage(message);
+//                }
             }
         });
     }

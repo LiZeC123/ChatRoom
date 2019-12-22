@@ -9,6 +9,7 @@
         <module name="chartroom-core" />
         <module name="chartroom-client" />
         <module name="chartroom-server" />
+        <module name="chartroom-test-tool" />
       </profile>
     </annotationProcessing>
   </component>

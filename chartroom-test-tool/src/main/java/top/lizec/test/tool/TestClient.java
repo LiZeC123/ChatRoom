@@ -1,4 +1,4 @@
-package top.lizec.server;
+package top.lizec.test.tool;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

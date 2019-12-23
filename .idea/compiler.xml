@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="chartroom-core" />
+        <module name="chartroom-key" />
         <module name="chartroom-client" />
         <module name="chartroom-server" />
         <module name="chartroom-test-tool" />

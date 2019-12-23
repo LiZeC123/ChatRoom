@@ -34,6 +34,7 @@ public class LSTPEntityRequest {
         LSTPEntityRequest lstpEntityRequest = new LSTPEntityRequest();
         String[] entity = request.split("\n\n");
         if (entity.length != 2) {
+            System.err.println(request);
             throw new IllegalArgumentException("LSTP请求格式错误");
         }
 
@@ -44,6 +45,7 @@ public class LSTPEntityRequest {
         String[] arg = lines[0].split(" ");
 
         if (arg.length != 3) {
+            System.err.println(request);
             throw new IllegalArgumentException("LSTP请求格式错误");
         }
 
@@ -53,6 +55,7 @@ public class LSTPEntityRequest {
         for (int i = 1; i < lines.length; i++) {
             String[] info = lines[i].split(":");
             if (info.length != 2) {
+                System.err.println(request);
                 throw new IllegalArgumentException("LSTP请求格式错误");
             }
 

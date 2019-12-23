@@ -26,6 +26,7 @@ import top.lizec.core.proxy.PushProxy;
 import top.lizec.core.proxy.PushSocketManager;
 import top.lizec.core.proxy.RequestProxy;
 import top.lizec.core.proxy.UserThread;
+import top.lizec.core.security.CertManager;
 
 public class LZApplication {
     // 服务器端只需要群发消息, 客户端需要请求服务器端, 需要这个接口
@@ -56,6 +57,7 @@ public class LZApplication {
     private HashMap<String, Method> pathMethod = new HashMap<>();
     private HashMap<Class<?>, Object> automatiqueList = new HashMap<>();
     private PushSocketManager manager = new PushSocketManager();
+    private CertManager certManager;
 
     public static void run(Class app) {
         new LZApplication().runApp(app, null);
@@ -66,7 +68,7 @@ public class LZApplication {
     }
 
     private void runApp(Class app, UserThread mainThread) {
-        System.out.println("LZApplication");
+        System.out.println("Start " + app.getSimpleName());
 
         String autoScanPackage;
         for (Annotation annotation : app.getAnnotations()) {
@@ -85,7 +87,10 @@ public class LZApplication {
         }
 
         if (null != app.getAnnotation(LSTPServer.class)) {
-            startServerSocket();
+            LSTPServer annotation = (LSTPServer) app.getAnnotation(LSTPServer.class);
+            String serverName = annotation.name();
+            loadCertManager(serverName);
+            startServerSocket(serverName);
         }
 
         if (null != app.getAnnotation(LSTPClient.class)) {
@@ -94,7 +99,7 @@ public class LZApplication {
 
         final Context context = new Context(automatiqueList, manager);
         if (null != mainThread) {
-            System.out.println("启动用户主线程");
+            System.out.println("Start User-Defined Main Thread");
             new Thread(() -> mainThread.run(context)).start();
         }
     }
@@ -132,7 +137,7 @@ public class LZApplication {
             for (Annotation annotation : method.getAnnotations()) {
                 if (annotation instanceof GetMapping) {
                     String path = prefix + ((GetMapping) annotation).value();
-                    System.out.println("path is " + path);
+                    System.out.println("Extract Path: " + path);
                     pathController.put(path, ins);
                     pathMethod.put(path, method);
                 }
@@ -171,16 +176,15 @@ public class LZApplication {
 
     private void autoSetComponent() throws Exception {
         for (Class<?> clazz : automatiqueList.keySet()) {
-            System.out.println("automatiqueList:" + clazz);
+            //System.out.println("automatiqueList:" + clazz);
             for (Field field : clazz.getDeclaredFields()) {
-                System.out.println("    Field:" + field);
+                //System.out.println("    Field:" + field);
                 for (Annotation annotation : field.getAnnotations()) {
-                    System.out.println("        annotation:" + annotation);
+                    //System.out.println("        annotation:" + annotation);
                     if (annotation instanceof Automatique) {
-
                         if (automatiqueList.containsKey(field.getType())) {
                             field.setAccessible(true);
-                            System.out.println("        automatique");
+                            System.out.println("Automatically Inject " + field);
                             field.set(automatiqueList.get(clazz), automatiqueList.get(field.getType()));
                         } else {
                             throw new IllegalArgumentException("自动注入失败");
@@ -191,14 +195,19 @@ public class LZApplication {
         }
     }
 
-    private void startServerSocket() {
+    private void loadCertManager(String serverName) {
+        System.out.println("Load Certificate");
+        this.certManager = new CertManager(serverName);
+    }
+
+    private void startServerSocket(String serverName) {
         new Thread(() -> {
             try {
-                System.out.println("启动业务Server线程");
+                System.out.println("Start Work Thread For Server");
                 ServerSocket serverSocket = new ServerSocket(8848);
                 while (true) {
                     Socket socket = serverSocket.accept();
-                    new LSTPReceive(socket, pathController, pathMethod, true);
+                    new LSTPReceive(socket, serverName, certManager, pathController, pathMethod, true);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -207,12 +216,12 @@ public class LZApplication {
 
         new Thread(() -> {
             try {
-                System.out.println("启动推送Server线程");
+                System.out.println("Start Push Thread For Server");
                 ServerSocket serverSocket = new ServerSocket(8846);
                 while (true) {
                     Socket socket = serverSocket.accept();
-                    System.out.println("推送Server线程收到新的Socket");
-                    manager.addSocket(socket);
+                    System.out.println("Push Thread Receive A New Socket Request From Client");
+                    manager.addSocket(socket, serverName, certManager);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -223,9 +232,9 @@ public class LZApplication {
     private void startClientSocket() {
         new Thread(() -> {
             try {
-                System.out.println("启动消息推送接收线程");
+                System.out.println("Start Push Thread For Client");
                 Socket socket = new Socket("localhost", 8846);
-                new LSTPReceive(socket, pathController, pathMethod, true);
+                new LSTPReceive(socket, null, null, pathController, pathMethod, true);
             } catch (IOException e) {
                 e.printStackTrace();
             }

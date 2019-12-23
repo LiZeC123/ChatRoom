@@ -3,12 +3,14 @@ package top.lizec.core.proxy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.HashMap;
 
 import top.lizec.core.entity.LSTPEntityRequest;
 import top.lizec.core.entity.LSTPEntityResponse;
+import top.lizec.core.security.CertManager;
 
 public class LSTPReceive {
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -17,16 +19,12 @@ public class LSTPReceive {
     private HashMap<String, Method> pathList;
     private boolean loopMode;
 
-    public LSTPReceive(Socket socket, HashMap<String, Object> receiver, HashMap<String, Method> pathList, boolean loopMode) throws IOException {
-        this.socket = new ObjectSocket(socket);
+    public LSTPReceive(Socket socket, String serverName, CertManager certManager, HashMap<String, Object> receiver, HashMap<String, Method> pathList, boolean loopMode) throws IOException {
+        this.socket = new ObjectSocket(socket, serverName, certManager);
         this.receiver = receiver;
         this.pathList = pathList;
         this.loopMode = loopMode;
         startIOThread();
-    }
-
-    public LSTPReceive(Socket socket, HashMap<String, Object> receiver, HashMap<String, Method> pathList) throws IOException {
-        this(socket, receiver, pathList, false);
     }
 
     private static Class<?> getParameterType(Method method) {
@@ -54,18 +52,23 @@ public class LSTPReceive {
             Object ins = receiver.get(request.getPath());
             Method method = pathList.get(request.getPath());
 
-            Class<?> type = getParameterType(method);
-            Object result;
-            if (type == null) {
-                result = method.invoke(ins);
-            } else {
-                Object param = tryParseBodyWith(request.getBody(), type);
-                result = method.invoke(ins, param);
-            }
+            Object result = invokeMethod(request, ins, method);
 
             LSTPEntityResponse response = new LSTPEntityResponse("200", mapper.writeValueAsString(result));
             socket.writeUTF(response.toString());
         }
+    }
+
+    private Object invokeMethod(LSTPEntityRequest request, Object ins, Method method) throws IllegalAccessException, InvocationTargetException {
+        Class<?> type = getParameterType(method);
+        Object result;
+        if (type == null) {
+            result = method.invoke(ins);
+        } else {
+            Object param = tryParseBodyWith(request.getBody(), type);
+            result = method.invoke(ins, param);
+        }
+        return result;
     }
 
     private void startIOThread() {

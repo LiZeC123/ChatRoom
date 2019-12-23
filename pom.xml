@@ -13,6 +13,7 @@
         <module>chartroom-client</module>
         <module>chartroom-core</module>
         <module>chartroom-test-tool</module>
+        <module>chartroom-key</module>
     </modules>
 
 

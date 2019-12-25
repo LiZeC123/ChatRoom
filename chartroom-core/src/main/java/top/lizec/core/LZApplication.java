@@ -29,29 +29,7 @@ import top.lizec.core.proxy.UserThread;
 import top.lizec.core.security.CertManager;
 
 public class LZApplication {
-    // 服务器端只需要群发消息, 客户端需要请求服务器端, 需要这个接口
-    // 1. 扫描Request的注解
-    // 2. 根据注解实现动态代理
-    // 3. 扫描需要注入Request的类, 通过反射注入动态代理对象
-    // 4. 客户端代码调用时 -> 调用代理方法 -> 使用协议包裹参数和返回值
-    // IOC      https://www.cnblogs.com/lijiasnong/p/8398734.html
-    // 动态代理 https://www.cnblogs.com/socketqiang/p/11212029.html
-    // 需要产生如下的几个类
-    // 1. socket消息接收类, 处理请求, 然后调用指定的方法
-    // 2. socket消息发送类, 指定方法被调用时, 发送请求, 可以缓存socket
-    // 3. ServerSocket类, 服务器端需要这个类监听请求, 以及群发任务
-    //      - 显然群发任务需要持有全部的Socket, 因此只能由这个类完成
 
-    // 1. 服务器端启动推送ServerSocket, 接收客户端的请求
-    // 2. 将客户端的请求Socket注入到相应的代理中
-    // 3. 代理根据需要发送消息
-
-    // 1. 客户端启动接收推送的Socket
-    // 2. 将Socket绑定到Receive之中
-    // 3. 收到消息时, 调用相应的方法
-
-
-    // 通过 Connect: keep-alive可以决定是否需要持有Socket进行循环
 
     private HashMap<String, Object> pathController = new HashMap<>();
     private HashMap<String, Method> pathMethod = new HashMap<>();

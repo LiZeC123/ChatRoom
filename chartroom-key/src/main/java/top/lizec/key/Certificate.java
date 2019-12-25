@@ -97,12 +97,4 @@ public class Certificate implements Serializable {
     public LocalDateTime getDate() {
         return date;
     }
-
-    public byte[] getSignature() {
-        return signature;
-    }
-
-    public void setSignature(byte[] signature) {
-        this.signature = signature;
-    }
 }

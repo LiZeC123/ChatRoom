@@ -15,11 +15,9 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class CertificateAuthority {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH-mm-ss");
 
     /**
      * 创建CA的密钥对, 此操作在整个项目中只需要执行一次 创建完成后将文件移动到resources目录
@@ -61,7 +59,7 @@ public class CertificateAuthority {
      *
      * @param name 证明的名称
      */
-    public static void createCertificate(String name) throws Exception {
+    private static void createCertificate(String name) throws Exception {
         LocalDateTime expiration = LocalDateTime.now().plusMonths(3);
         KeyPair keyPair = createRSAKeyPair();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
@@ -83,13 +81,15 @@ public class CertificateAuthority {
         keyPairGen.initialize(4096, new SecureRandom());
         // 生成一个密钥对，保存在keyPair中
         return keyPairGen.generateKeyPair();
-//        // 得到私钥
-//        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-//        // 得到公钥
-//        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
     }
 
     public static void main(String[] args) throws Exception {
+        if (args[1].equals("init CA")) {
+            createCAKeyPair();
+        } else if (args[1].equals("init Server")) {
+            createCertificate(args[2]);
+        }
+
         //CertificateAuthority.createCAKeyPair();
 //        LocalDateTime time = LocalDateTime.now().plusMonths(3);
 //        System.out.println(time.format(formatter));

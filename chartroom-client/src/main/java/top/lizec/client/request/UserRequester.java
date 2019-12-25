@@ -9,4 +9,7 @@ public interface UserRequester {
 
     @GetMapping("/signUp")
     User signUp(User user);
+
+    @GetMapping("/login")
+    String login(User user);
 }

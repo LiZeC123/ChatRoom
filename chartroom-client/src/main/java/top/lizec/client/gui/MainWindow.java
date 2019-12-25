@@ -16,6 +16,9 @@ public class MainWindow {
     private JTextField textField1;
     private JTextArea textArea1;
     private JButton btnMsg;
+    private JList list1;
+    private String username;
+    private String token;
 
     @Automatique
     private MessageRequester requester;
@@ -28,10 +31,19 @@ public class MainWindow {
                 super.mouseClicked(e);
                 String text = textField1.getText();
                 textField1.setText("");
-                String content = "<LiZeC>: " + text;
-                requester.addMessage(new Message("LiZeC", text));
+
+                //String content = String.format("<%s>: %s",username,text);
+                requester.addMessage(new Message(username, text));
             }
         });
+    }
+
+    void setUsername(String username) {
+        this.username = username;
+    }
+
+    void setToken(String token) {
+        this.token = token;
     }
 
     public void setContent(String newContent) {
@@ -39,10 +51,9 @@ public class MainWindow {
             textArea1.append(newContent);
             textArea1.append("\n");
         });
-
     }
 
-    public JPanel getMainPanel() {
+    JPanel getMainPanel() {
         return mainPanel;
     }
 }

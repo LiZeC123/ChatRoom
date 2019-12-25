@@ -1,8 +1,6 @@
 package top.lizec.client;
 
-import javax.swing.*;
-
-import top.lizec.client.gui.Login;
+import top.lizec.client.gui.ChartroomGUIApplication;
 import top.lizec.core.LZApplication;
 import top.lizec.core.annotation.AutomatiqueScan;
 import top.lizec.core.annotation.LSTPClient;
@@ -22,13 +20,8 @@ public class ChartRoomClientApplication {
      * */
     public static void main(String[] args) {
         LZApplication.run(ChartRoomClientApplication.class, context -> {
-            Login login = context.getObjectByType(Login.class);
-            JFrame jFrame = new JFrame("Test");
-            jFrame.setContentPane(login.getMainPanel());
-            login.setParent(jFrame);
-            jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            jFrame.pack();
-            jFrame.setVisible(true);
+            ChartroomGUIApplication.setContext(context);
+            ChartroomGUIApplication.launchApp();
         });
     }
 }

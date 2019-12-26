@@ -26,6 +26,8 @@ public class LoginController implements Initializable {
         if (u != null) {
             System.out.println("Token is" + u);
             app.gotoMain();
+        } else {
+            System.out.println("用户名或密码错误");
         }
     }
 

@@ -165,6 +165,7 @@ public class LZApplication {
                             System.out.println("Automatically Inject " + field);
                             field.set(automatiqueList.get(clazz), automatiqueList.get(field.getType()));
                         } else {
+                            System.err.println(field + "注入失败");
                             throw new IllegalArgumentException("自动注入失败");
                         }
                     }

@@ -11,13 +11,25 @@ public class UserController {
     @Automatique
     private UserBiz userBiz;
 
+    /**
+     * 注册
+     *
+     * @param user 用户信息
+     * @return 用户的Token
+     */
     @GetMapping("/signUp")
-    public User signUp(User user) {
+    public String signUp(User user) {
         return userBiz.signUp(user);
     }
 
+    /**
+     * 登录
+     *
+     * @param user 用户信息
+     * @return 用户的Token
+     */
     @GetMapping("/login")
-    public User login(User user) {
+    public String login(User user) {
         return userBiz.login(user);
     }
 

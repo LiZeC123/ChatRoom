@@ -1,15 +1,5 @@
 package top.lizec.core.entity;
 
-/*
-GET /login LZTP/1.0
-HOST: chartroom.lizec.top
-Connect: keep-alive
-User-Agent: LzcClient/1.0(Windows NT 10; Win64)
-
-{"username":"GGBoy","password":"g85fdjf"}
-
-*
-* */
 public class LSTPEntityRequest {
     private String method;
     private String path;
@@ -72,7 +62,7 @@ public class LSTPEntityRequest {
     }
 
     public static LSTPEntityRequest createGetWith(String path, String body) {
-        return new LSTPEntityRequest("POST", path, body);
+        return new LSTPEntityRequest("GET", path, body);
     }
 
     public static void main(String[] args) {

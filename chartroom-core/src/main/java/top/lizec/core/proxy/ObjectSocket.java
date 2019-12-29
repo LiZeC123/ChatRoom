@@ -14,6 +14,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import top.lizec.core.entity.LSTPEntityRequest;
+import top.lizec.core.entity.LSTPEntityResponse;
+import top.lizec.core.exception.UserLogoutException;
 import top.lizec.core.security.CertManager;
 import top.lizec.core.security.KeyCalculator;
 import top.lizec.core.security.entity.SecurityCertificateBody;
@@ -33,27 +35,15 @@ class ObjectSocket {
     private boolean closed = false;
 
     private String serverName;   // 服务器端名称
+    private String clientName;   // 连接的客户端的名称
     private CertManager certManager;
-
-    // 加密通信设计
-    // 1. 在底层封装, 对高层无感知
-    //
-    /*
-     * 通信过程
-     * 1. 客户端向服务器端发送请求和随机数1
-     * 2. 服务器端接受请求后, 向客户端发送证书/ 公钥文件 + 随机数2
-     * 3. 客户端验证证书, 使用公钥加密随机数3
-     * 4. 客户端和服务器端根据三个随机数各自计算对称密钥
-     *
-     *
-     * */
-
 
     ObjectSocket(Socket socket, String serverName, CertManager certManager) throws IOException {
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
         this.serverName = serverName;
         this.certManager = certManager;
+        this.clientName = null;
         if (hasSecurity) {
             connectWithSecurity();
         }
@@ -63,14 +53,9 @@ class ObjectSocket {
         this(socket, null, null);
     }
 
-//    ObjectSocket(Socket socket) throws IOException {
-//        this(socket,null);
-//    }
-
     private boolean isServer() {
         return serverName != null;
     }
-
 
     private void connectWithSecurity() throws IOException {
         if (isServer()) {
@@ -89,7 +74,7 @@ class ObjectSocket {
     }
 
 
-    void writeUTF(String string) throws IOException {
+    void writeUTF(String string) {
         if (hasSecurity) {
             _writeUTF(keyCalculator.encodeWithRandomKey(string));
         } else {
@@ -105,17 +90,18 @@ class ObjectSocket {
         }
     }
 
-    private void _writeUTF(String content) {
+    synchronized private void _writeUTF(String content) {
         try {
             out.writeUTF(content);
             out.flush();
         } catch (IOException e) {
             closed = true;
             closeStream();
+            throw new UserLogoutException();
         }
     }
 
-    private String _readUTF() {
+    synchronized private String _readUTF() {
         try {
             return in.readUTF();
         } catch (IOException e) {
@@ -140,6 +126,21 @@ class ObjectSocket {
         } catch (IOException ignored) {
 
         }
+    }
+
+    String getClientName() {
+        if (clientName == null) {
+            try {
+                LSTPEntityRequest request = LSTPEntityRequest.createGetWith("/check/user", mapper.writeValueAsString(null));
+                writeUTF(request.toString());
+                LSTPEntityResponse response = LSTPEntityResponse.parseFrom(readUTF());
+                clientName = mapper.readValue(response.getBody(), String.class);
+            } catch (Exception e) {
+                System.err.println("获取连接名称失败");
+            }
+        }
+
+        return clientName;
     }
 
     private void doClientShake() throws Exception {

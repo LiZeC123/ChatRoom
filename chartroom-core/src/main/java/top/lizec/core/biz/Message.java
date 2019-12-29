@@ -2,16 +2,20 @@ package top.lizec.core.biz;
 
 public class Message {
     private String username;
+    private String token;
     private String content;
+    private String receiver;
 
 
     public Message() {
 
     }
 
-    public Message(String username, String content) {
+    public Message(String username, String token, String content, String receiver) {
         this.username = username;
+        this.token = token;
         this.content = content;
+        this.receiver = receiver;
     }
 
     public String getUsername() {
@@ -22,6 +26,14 @@ public class Message {
         this.username = username;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public String getContent() {
         return content;
     }
@@ -30,11 +42,21 @@ public class Message {
         this.content = content;
     }
 
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
                 "username='" + username + '\'' +
+                ", token='" + token + '\'' +
                 ", content='" + content + '\'' +
+                ", receiver='" + receiver + '\'' +
                 '}';
     }
 }

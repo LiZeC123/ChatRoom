@@ -3,14 +3,6 @@ package top.lizec.core.entity;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/*
-LZTP/1.0 200
-Server: LzcServer
-Date: 2019-12-16 14:23:12
-Content-Type: text/json
-
-{"result":"success"}
-*/
 public class LSTPEntityResponse {
     private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH-mm-ss");
 

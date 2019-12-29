@@ -34,8 +34,10 @@ public class LZApplication {
     private HashMap<String, Object> pathController = new HashMap<>();
     private HashMap<String, Method> pathMethod = new HashMap<>();
     private HashMap<Class<?>, Object> automatiqueList = new HashMap<>();
+    private HashMap<String, String> valueList = new HashMap<>();
     private PushSocketManager manager = new PushSocketManager();
     private CertManager certManager;
+    private final Context context = new Context(automatiqueList, manager, valueList);
 
     public static void run(Class app) {
         new LZApplication().runApp(app, null);
@@ -75,7 +77,6 @@ public class LZApplication {
             startClientSocket();
         }
 
-        final Context context = new Context(automatiqueList, manager);
         if (null != mainThread) {
             System.out.println("Start User-Defined Main Thread");
             new Thread(() -> mainThread.run(context)).start();
@@ -83,6 +84,9 @@ public class LZApplication {
     }
 
     private void scanComponent(String scanPackage) throws IllegalAccessException, InstantiationException {
+        // 首先放入Context对象
+        automatiqueList.put(Context.class, context);
+        // 然后扫描需要注入的字段
         Reflections reflections = new Reflections(scanPackage);
         Set<Class<?>> set = reflections.getTypesAnnotatedWith(Component.class);
         for (Class<?> controller : set) {
@@ -146,7 +150,7 @@ public class LZApplication {
         Set<Class<?>> set = reflections.getTypesAnnotatedWith(PushController.class);
 
         for (Class<?> controller : set) {
-            PushProxy proxy = new PushProxy("chartroom", "", manager);
+            PushProxy proxy = new PushProxy("", manager);
             Object ins = proxy.newInstall(controller);
             automatiqueList.put(controller, ins);
         }

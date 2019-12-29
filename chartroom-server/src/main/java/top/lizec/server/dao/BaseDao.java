@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 
 public class BaseDao<T> {
     private final ObjectMapper mapper = new ObjectMapper();
-    protected List<T> mList;
+    List<T> mList;
 
     BaseDao() {
         try {
@@ -28,6 +28,7 @@ public class BaseDao<T> {
         } catch (FileNotFoundException e) {
             mList = new ArrayList<>();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException("数据加载失败");
         }
     }

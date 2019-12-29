@@ -14,10 +14,7 @@ public class UserController {
     private UserBiz userBiz;
 
     /**
-     * 注册
-     *
-     * @param user 用户信息
-     * @return 用户的Token
+     * 注册用户, 并返回Token
      */
     @GetMapping("/signUp")
     public String signUp(User user) {
@@ -25,21 +22,25 @@ public class UserController {
     }
 
     /**
-     * 登录
-     *
-     * @param user 用户信息
-     * @return 用户的Token
+     * 登录用户, 并返回Token
      */
     @GetMapping("/login")
     public String login(User user) {
         return userBiz.login(user);
     }
 
+    /**
+     * 注销用户和相应的Token
+     */
+    @GetMapping("/logout")
+    public String logout(User user) {
+        return userBiz.logout(user);
+    }
+
 
     @GetMapping("/friendList")
     public List<String> friendList(User user) {
-        //if( )
-        return null;
+        return userBiz.friendList(user);
     }
 
     @GetMapping("/online")

@@ -1,5 +1,7 @@
 package top.lizec.server.biz;
 
+import java.util.List;
+
 import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.Component;
 import top.lizec.core.biz.User;
@@ -40,6 +42,14 @@ public class UserBiz {
             tokenDao.cleanTokenForUser(user);
             return "Success";
         }
+        return null;
+    }
+
+    public List<String> friendList(User user) {
+        if (tokenDao.checkUserToken(user)) {
+            return friendDao.findFriendByName(user.getUsername());
+        }
+        System.err.println("Token 验证失败, 无法请求此接口");
         return null;
     }
 

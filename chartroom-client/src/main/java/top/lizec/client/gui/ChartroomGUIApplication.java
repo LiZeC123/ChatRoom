@@ -56,7 +56,8 @@ public class ChartroomGUIApplication extends Application {
         System.out.println("Goto Main");
         try {
             MainController main = (MainController) replaceSceneContent(StaticResourcesConfig.MAIN_VIEW_PATH);
-            main.setApp(this);
+            main.setApp(context);
+            main.initList();
         } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);
         }
@@ -77,6 +78,7 @@ public class ChartroomGUIApplication extends Application {
             stage.setScene(scene);
             stage.sizeToScene();
         } catch (Exception e) {
+            e.printStackTrace();
             logger.log(Level.SEVERE, "页面加载异常！");
         }
         return (Initializable) loader.getController();

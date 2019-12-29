@@ -22,30 +22,32 @@ public class LoginController implements Initializable {
 
     public void loginButtonClick(ActionEvent actionEvent) {
         User user = new User(login_username.getText(), login_password.getText(), null);
-        System.out.println(user);
-        String token = context.getObjectByType(UserRequester.class).login(user);
-        if (token != null) {
-            System.out.println("Token is" + token);
-            context.setValue("name", user.getUsername());
-            context.setValue("token", token);
-            app.gotoMain();
-        } else {
-            System.out.println("用户名或密码错误");
+        doRequest(user, true);
+    }
+
+    public void loginButtonKey() {
+        User user = new User(login_username.getText(), login_password.getText(), null);
+        doRequest(user, true);
+    }
+
+    private void doRequest(User user, boolean isLogin) {
+        if (isLogin) {
+            System.out.println(user);
+            String token = context.getObjectByType(UserRequester.class).login(user);
+            if (token != null) {
+                System.out.println("Token is" + token);
+                context.setValue("name", user.getUsername());
+                context.setValue("token", token);
+                app.gotoMain();
+            } else {
+                System.out.println("用户名或密码错误");
+            }
         }
     }
 
     public void singUpButtonClick(ActionEvent actionEvent) {
         User user = new User(login_username.getText(), login_password.getText(), null);
-        System.out.println(user);
-        String token = context.getObjectByType(UserRequester.class).signUp(user);
-        if (token != null) {
-            System.out.println("Token is" + token);
-            context.setValue("name", user.getUsername());
-            context.setValue("token", token);
-            app.gotoMain();
-        } else {
-            System.out.println("用户名或密码错误");
-        }
+        doRequest(user, false);
     }
 
 

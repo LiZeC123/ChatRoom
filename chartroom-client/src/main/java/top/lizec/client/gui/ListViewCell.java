@@ -2,14 +2,15 @@ package top.lizec.client.gui;
 
 import javafx.scene.control.ListCell;
 
-public class ListViewCell extends ListCell<String> {
+public class ListViewCell extends ListCell<UserAndMessage> {
+
 
     @Override
-    protected void updateItem(String item, boolean empty) {
+    protected void updateItem(UserAndMessage item, boolean empty) {
         super.updateItem(item, empty);
         if (item != null) {
             UserItem userItem = new UserItem();
-            userItem.setInfo("User:" + item, item + "This is some message ANd very very long");
+            userItem.setInfo(item.getUsername(), item.getContent());
             setGraphic(userItem.getPane());
         }
     }

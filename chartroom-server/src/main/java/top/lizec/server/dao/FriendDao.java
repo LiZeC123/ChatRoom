@@ -10,7 +10,13 @@ import top.lizec.server.entity.Friend;
 @Component
 public class FriendDao extends BaseDao<Friend> {
 
-    List<String> findFriendByName(String name) {
+    public static void main(String[] args) {
+        FriendDao dao = new FriendDao();
+        //dao.insert(new Friend("lizec","ggboy"));
+        dao.findFriendByName("lizec").forEach(System.out::println);
+    }
+
+    public List<String> findFriendByName(String name) {
         return mList.stream().map(friend -> {
             if (friend.getUser1().equals(name)) {
                 return friend.getUser2();
@@ -21,6 +27,4 @@ public class FriendDao extends BaseDao<Friend> {
             }
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
-
-
 }

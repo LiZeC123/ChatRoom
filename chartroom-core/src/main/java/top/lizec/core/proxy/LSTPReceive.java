@@ -72,7 +72,7 @@ public class LSTPReceive {
     }
 
     private void startIOThread() {
-        new Thread(() -> {
+        Thread ioThread = new Thread(() -> {
             do {
                 try {
                     oneLoop();
@@ -80,7 +80,10 @@ public class LSTPReceive {
                     e.printStackTrace();
                 }
             } while (loopMode && !socket.hasClosed());
-        }).start();
+        });
+        // 设置为守护线程, 从而在其他线程都结束时不再等待请求
+        ioThread.setDaemon(true);
+        ioThread.start();
     }
 
 

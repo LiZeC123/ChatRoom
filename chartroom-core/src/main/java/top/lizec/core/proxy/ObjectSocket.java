@@ -23,7 +23,7 @@ import top.lizec.core.security.entity.SecurityRequest1Body;
 import top.lizec.key.Certificate;
 import top.lizec.key.CertificateAuthority;
 
-class ObjectSocket {
+public class ObjectSocket {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final String finishInfo = LSTPEntityRequest.createGetWith("__finish__", "Empty").toString();
     private static final KeyCalculator keyCalculator = new KeyCalculator();
@@ -49,7 +49,7 @@ class ObjectSocket {
         }
     }
 
-    ObjectSocket(Socket socket) throws IOException {
+    public ObjectSocket(Socket socket) throws IOException {
         this(socket, null, null);
     }
 
@@ -74,7 +74,7 @@ class ObjectSocket {
     }
 
 
-    void writeUTF(String string) {
+    public void writeUTF(String string) {
         if (hasSecurity) {
             _writeUTF(keyCalculator.encodeWithRandomKey(string));
         } else {
@@ -82,7 +82,7 @@ class ObjectSocket {
         }
     }
 
-    String readUTF() throws IOException {
+    public String readUTF() throws IOException {
         if (hasSecurity) {
             return keyCalculator.decodeWithRandomKey(_readUTF());
         } else {

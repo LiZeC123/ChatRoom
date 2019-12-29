@@ -3,6 +3,7 @@ package top.lizec.server.biz;
 import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.Component;
 import top.lizec.core.biz.User;
+import top.lizec.server.dao.FriendDao;
 import top.lizec.server.dao.TokenDao;
 import top.lizec.server.dao.UserDao;
 
@@ -13,6 +14,8 @@ public class UserBiz {
     private UserDao userDao;
     @Automatique
     private TokenDao tokenDao;
+    @Automatique
+    private FriendDao friendDao;
 
     public String signUp(User user) {
         User dataUser = userDao.findUserByName(user.getUsername());

@@ -28,6 +28,17 @@ public class TokenDao {
         }
     }
 
+    public boolean checkUserToken(User user) {
+        if (user == null || user.getToken() == null) {
+            return false;
+        }
+        if (!userTokens.containsKey(user) || !tokenUsers.containsKey(user.getToken())) {
+            return false;
+        }
+
+        return userTokens.get(user).equals(user.getToken()) && tokenUsers.get(user.getToken()).equals(user);
+    }
+
     public User getUserByToken(String token) {
         return tokenUsers.get(token);
     }

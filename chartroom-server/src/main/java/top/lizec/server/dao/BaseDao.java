@@ -21,7 +21,7 @@ public class BaseDao<T> {
 
     BaseDao() {
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("user.data")));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(getTClass().getSimpleName() + ".data")));
             String jsonStr = in.readUTF();
             JavaType javaType = mapper.getTypeFactory().constructParametricType(ArrayList.class, getTClass());
             mList = mapper.readValue(jsonStr, javaType);
@@ -66,7 +66,7 @@ public class BaseDao<T> {
 
     private void saveToFile() {
         try {
-            File file = new File(getTClass().getName() + ".data");
+            File file = new File(getTClass().getSimpleName() + ".data");
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
             System.out.println(mapper.writeValueAsString(mList));
             out.writeUTF(mapper.writeValueAsString(mList));

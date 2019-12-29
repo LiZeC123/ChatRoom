@@ -1,5 +1,7 @@
 package top.lizec.server.controller;
 
+import java.util.List;
+
 import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.GetMapping;
 import top.lizec.core.annotation.ReceiveController;
@@ -31,6 +33,13 @@ public class UserController {
     @GetMapping("/login")
     public String login(User user) {
         return userBiz.login(user);
+    }
+
+
+    @GetMapping("/friendList")
+    public List<String> friendList(User user) {
+        //if( )
+        return null;
     }
 
     @GetMapping("/online")

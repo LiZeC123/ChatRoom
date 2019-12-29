@@ -11,6 +11,8 @@ public class UserDao extends BaseDao<User> {
 
     public static void main(String[] args) {
         UserDao dao = new UserDao();
+        dao.insert(new User("lizec", "1"));
+        dao.insert(new User("ggboy", "1"));
         dao.getAllUser().forEach(System.out::println);
     }
 

@@ -4,18 +4,17 @@ import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.GetMapping;
 import top.lizec.core.annotation.ReceiveController;
 import top.lizec.core.biz.Message;
-import top.lizec.server.push.MessagePush;
+import top.lizec.server.biz.MessageBiz;
 
 @ReceiveController("/message")
 public class MessageController {
-    // 自动注入MessagePush类, 从而可以在受到消息后群发
     @Automatique
-    private MessagePush messagePush;
+    private MessageBiz messageBiz;
 
     @GetMapping("/add")
     public String addMessage(Message message) {
         System.out.println("Server Receive Message:" + message);
-        messagePush.pushMessage(message);
+        messageBiz.forward(message);
         return "Success";
     }
 

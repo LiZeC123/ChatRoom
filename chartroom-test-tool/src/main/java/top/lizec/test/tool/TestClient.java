@@ -1,16 +1,23 @@
 package top.lizec.test.tool;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import top.lizec.core.biz.Message;
 import top.lizec.core.entity.LSTPEntityRequest;
 
 public class TestClient {
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static void main(String[] args) throws IOException {
-        LSTPEntityRequest request = LSTPEntityRequest.createGetWith("/message/add", "{\"username\":\"GGBoy\",\"content\":\"Across the Great Wall, we can reach every corner in the world.\"}");
+
+        Message message = new Message("ggboy", "3fs", "Across the Great Wall, we can reach every corner in the world.", "lizec");
+
+        LSTPEntityRequest request = LSTPEntityRequest.createGetWith("/message/add", mapper.writeValueAsString(message));
         Socket socket = new Socket("localhost", 8848);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         String pack = request.toString();

@@ -8,7 +8,7 @@ import top.lizec.core.biz.User;
 public interface UserRequester {
 
     @GetMapping("/signUp")
-    User signUp(User user);
+    String signUp(User user);
 
     @GetMapping("/login")
     String login(User user);

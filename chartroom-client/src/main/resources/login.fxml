@@ -14,7 +14,9 @@
     <Label layoutX="99.0" layoutY="96.0" text="用户名："/>
     <Label layoutX="99.0" layoutY="146.0" text="密  码："/>
     <TextField fx:id="login_username" layoutX="174.0" layoutY="91.0" promptText="用户名"/>
+    <PasswordField fx:id="login_password" layoutX="174.0" layoutY="142.0" promptText="8位密码"/>
     <Button fx:id="login_button" layoutX="287.0" layoutY="212.0" mnemonicParsing="false"
             onAction="#loginButtonClick" text="登  录"/>
-    <PasswordField fx:id="login_password" layoutX="174.0" layoutY="142.0" promptText="8位密码"/>
+    <Button fx:id="signUp_button" layoutX="94.0" layoutY="212.0" mnemonicParsing="false"
+            text="注 册"/>
 </AnchorPane>

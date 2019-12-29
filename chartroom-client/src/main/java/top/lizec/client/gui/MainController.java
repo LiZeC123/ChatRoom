@@ -1,97 +1,57 @@
 package top.lizec.client.gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.ListView;
 
 public class MainController implements Initializable {
-    private static final Logger logger = Logger.getLogger(MainController.class.getName());
-    public TreeView main_treeview;
-    private ChartroomGUIApplication app;
-    public AnchorPane main_pane_under_scroll;
+    public ListView<String> user_list_view;
 
-    /**
-     * 设置TreeView
-     */
-    @SuppressWarnings("unchecked")
-    public void setTreeView() {
-        TreeItem<String> root = new TreeItem<String>(StaticResourcesConfig.MAIN_TREE_HEADER);
-        root.setExpanded(true);
-        root.getChildren().addAll(new TreeItem<String>(StaticResourcesConfig.MAIN_TREE_HEADER_ITEM1),
-                new TreeItem<String>(StaticResourcesConfig.MAIN_TREE_HEADER_ITEM2),
-                new TreeItem<String>(StaticResourcesConfig.MAIN_TREE_HEADER_ITEM3),
-                new TreeItem<String>(StaticResourcesConfig.MAIN_TREE_HEADER_ITEM4),
-                new TreeItem<String>(StaticResourcesConfig.MAIN_TREE_HEADER_ITEM5));
-        main_treeview.setRoot(root);
+//
+//    @Override
+//    public void start(Stage primaryStage) throws Exception {
+//        primaryStage.setTitle("My Tim");
+//        String fxml = "/main.fxml";
+//        FXMLLoader loader = new FXMLLoader();
+//        try (InputStream in = ChartroomGUIApplication.class.getResourceAsStream(fxml)) {
+//            loader.setBuilderFactory(new JavaFXBuilderFactory());
+//            loader.setLocation(ChartroomGUIApplication.class.getResource(fxml));
+//            AnchorPane page = loader.load(in);
+//            Scene scene = new Scene(page);
+//            scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
+//            primaryStage.setScene(scene);
+//            primaryStage.sizeToScene();
+//        }
+//        primaryStage.show();
+//    }
 
-    }
-
-    /**
-     * TreeView 点击事件
-     *
-     * @throws IOException
-     */
-    public void mainTreeViewClick() throws IOException {
-        logger.log(Level.INFO, "点击TreeView");
-        // 获取鼠标当前点击的Item
-        TreeItem<String> selectedItem = (TreeItem<String>) main_treeview.getSelectionModel().getSelectedItem();
-        logger.log(Level.INFO, selectedItem.getValue());
-
-        String pagePath = "";
-        switch (selectedItem.getValue()) {
-            case StaticResourcesConfig.MAIN_TREE_HEADER:
-                pagePath = StaticResourcesConfig.DEFAULT_VIEW_PATH;
-                break;
-            case StaticResourcesConfig.MAIN_TREE_HEADER_ITEM1:
-                pagePath = StaticResourcesConfig.NOTE_VIEW_PATH;
-                break;
-            case StaticResourcesConfig.MAIN_TREE_HEADER_ITEM2:
-                pagePath = StaticResourcesConfig.CLIP_VIEW_PATH;
-                break;
-            case StaticResourcesConfig.MAIN_TREE_HEADER_ITEM3:
-                pagePath = StaticResourcesConfig.USER_VIEW_PATH;
-                break;
-            case StaticResourcesConfig.MAIN_TREE_HEADER_ITEM4:
-                pagePath = StaticResourcesConfig.DATA_VIEW_PATH;
-                break;
-            case StaticResourcesConfig.MAIN_TREE_HEADER_ITEM5:
-                pagePath = StaticResourcesConfig.LANGUAGE_VIEW_PATH;
-                break;
-        }
-
-        skipView(pagePath);
-    }
-
-    /**
-     * 改变右侧scroll的界面
-     *
-     * @param pagePath
-     * @throws IOException
-     */
-    private void skipView(String pagePath) throws IOException {
-        logger.info("显示剪切板界面");
-        ObservableList<Node> scrolChildren = main_pane_under_scroll.getChildren();
-        scrolChildren.clear();
-        scrolChildren.add(FXMLLoader.load(getClass().getResource(pagePath)));
-    }
-
-
-    public void setApp(ChartroomGUIApplication app) {
-        this.app = app;
-    }
+//
+//    public static void main(String[] args) {
+//        launch(args);
+//    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setTreeView();
+        ObservableList<String> strList = FXCollections.observableArrayList();
+        for (int i = 0; i < 100; i++) {
+            strList.add("Item " + i);
+        }
+
+        user_list_view.setItems(strList);
+        user_list_view.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    System.out.println("old is " + oldValue + ", new is" + newValue);
+                });
+        user_list_view.setCellFactory(param -> new ListViewCell());
+
+    }
+
+    public void setApp(ChartroomGUIApplication chartroomGUIApplication) {
+
     }
 }

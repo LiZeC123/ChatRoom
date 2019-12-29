@@ -7,9 +7,6 @@ import top.lizec.core.biz.Message;
 @ReceiveController("/push")
 public class PushMessageReceive {
 
-    //@Automatique
-    //MainWindow mainWindow;
-
     @GetMapping("/message")
     public void receiveMessage(Message message) {
         System.out.println("On Recv" + Thread.currentThread().getName());

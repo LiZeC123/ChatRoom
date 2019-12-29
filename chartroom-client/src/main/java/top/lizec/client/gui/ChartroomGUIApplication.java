@@ -30,7 +30,7 @@ public class ChartroomGUIApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
-        stage.setTitle("XXXX系统");
+        stage.setTitle("My Tim");
         gotoLogin();
         stage.show();
 
@@ -40,6 +40,7 @@ public class ChartroomGUIApplication extends Application {
      * 跳转到登录界面
      */
     private void gotoLogin() {
+        System.out.println("Goto Login");
         try {
             LoginController login = (LoginController) replaceSceneContent(StaticResourcesConfig.LOGIN_VIEW_PATH);
             login.setApp(this, context);
@@ -52,6 +53,7 @@ public class ChartroomGUIApplication extends Application {
      * 跳转到主界面
      */
     void gotoMain() {
+        System.out.println("Goto Main");
         try {
             MainController main = (MainController) replaceSceneContent(StaticResourcesConfig.MAIN_VIEW_PATH);
             main.setApp(this);

@@ -1,36 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Text?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="top.lizec.client.gui.MainController"
-            prefHeight="400.0" prefWidth="600.0">
-    <children>
-        <BorderPane prefHeight="640.0" prefWidth="590.0">
-            <top>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="欢迎进入系统"
-                      BorderPane.alignment="CENTER_LEFT"/>
-            </top>
-            <left>
-                <TreeView fx:id="main_treeview" onMouseClicked="#mainTreeViewClick"
-                          prefHeight="360.0" prefWidth="126.0" BorderPane.alignment="TOP_LEFT"/>
-            </left>
-            <center>
-                <ScrollPane prefHeight="600.0" BorderPane.alignment="CENTER">
-                    <content>
-                        <AnchorPane fx:id="main_pane_under_scroll" maxHeight="-Infinity"
-                                    maxWidth="-Infinity" prefHeight="593.0" prefWidth="480.0"/>
-                    </content>
-                </ScrollPane>
-            </center>
-            <bottom>
-                <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="this system is created by NikolaZhang!" BorderPane.alignment="CENTER"/>
-            </bottom>
-        </BorderPane>
-    </children>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="1000.0"
+            xmlns="http://javafx.com/javafx/10.0.2-internal"
+            fx:controller="top.lizec.client.gui.MainController">
+   <children>
+      <ListView fx:id="user_list_view" layoutY="10.0" prefHeight="590.0" prefWidth="200.0"/>
+      <TextArea layoutX="200.0" layoutY="10.0" prefHeight="414.0" prefWidth="791.0"/>
+      <TextArea layoutX="200.0" layoutY="450.0" prefHeight="148.0" prefWidth="791.0"/>
+   </children>
 </AnchorPane>

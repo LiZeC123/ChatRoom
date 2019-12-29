@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="pane" prefHeight="60.0" prefWidth="200.0"
+            xmlns="http://javafx.com/javafx/10.0.2-internal">
+    <children>
+        <ImageView fx:id="user_header_img" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <clip>
+                <Circle fx:id="circle" centerX="25" centerY="25" fill="aqua">
+                    <radius>20</radius>
+                </Circle>
+            </clip>
+        </ImageView>
+        <Label fx:id="username_label" layoutX="50.0" maxHeight="150.0" maxWidth="150.0"
+               minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0"
+               text="Label">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <Label fx:id="user_message_label" layoutX="50.0" layoutY="25.0" maxHeight="150.0"
+               maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
+               prefWidth="150.0" text="Label">
+            <font>
+                <Font size="10.0"/>
+            </font>
+        </Label>
+    </children>
+</AnchorPane>

@@ -15,16 +15,33 @@ public class LoginController implements Initializable {
     public TextField login_username;
     public TextField login_password;
     public Button login_button;
+    public Button signUp_button;
     private ChartroomGUIApplication app;
     private Context context;
 
 
     public void loginButtonClick(ActionEvent actionEvent) {
-        User user = new User(login_username.getText(), login_password.getText());
+        User user = new User(login_username.getText(), login_password.getText(), null);
         System.out.println(user);
-        String u = context.getObjectByType(UserRequester.class).login(user);
-        if (u != null) {
-            System.out.println("Token is" + u);
+        String token = context.getObjectByType(UserRequester.class).login(user);
+        if (token != null) {
+            System.out.println("Token is" + token);
+            context.setValue("name", user.getUsername());
+            context.setValue("token", token);
+            app.gotoMain();
+        } else {
+            System.out.println("用户名或密码错误");
+        }
+    }
+
+    public void singUpButtonClick(ActionEvent actionEvent) {
+        User user = new User(login_username.getText(), login_password.getText(), null);
+        System.out.println(user);
+        String token = context.getObjectByType(UserRequester.class).signUp(user);
+        if (token != null) {
+            System.out.println("Token is" + token);
+            context.setValue("name", user.getUsername());
+            context.setValue("token", token);
             app.gotoMain();
         } else {
             System.out.println("用户名或密码错误");

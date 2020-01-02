@@ -4,6 +4,7 @@ import java.util.List;
 
 import top.lizec.core.annotation.GetMapping;
 import top.lizec.core.annotation.RequestController;
+import top.lizec.core.biz.FriendAndMessage;
 import top.lizec.core.biz.User;
 
 @RequestController("/user")
@@ -16,5 +17,5 @@ public interface UserRequester {
     String login(User user);
 
     @GetMapping("/friendList")
-    List<String> friendList(User user);
+    List<FriendAndMessage> friendList(User user);
 }

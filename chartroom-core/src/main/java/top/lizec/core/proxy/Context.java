@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 public class Context {
     private HashMap<Class<?>, Object> automatiqueList;
-    private PushSocketManager manager;
     private HashMap<String, String> valueList;
+    private HashMap<String, Object> objectList;
 
-    public Context(HashMap<Class<?>, Object> automatiqueList, PushSocketManager manager, HashMap<String, String> valueList) {
+    public Context(HashMap<Class<?>, Object> automatiqueList, HashMap<String, String> valueList) {
         this.automatiqueList = automatiqueList;
-        this.manager = manager;
         this.valueList = valueList;
+        this.objectList = new HashMap<>();
     }
 
     @SuppressWarnings("unchecked")
@@ -29,4 +29,13 @@ public class Context {
         valueList.put(name, value);
     }
 
+
+    @SuppressWarnings("unchecked")
+    public <T> T getObjectByName(String name) {
+        return (T) objectList.get(name);
+    }
+
+    public void setObject(String name, Object object) {
+        objectList.put(name, object);
+    }
 }

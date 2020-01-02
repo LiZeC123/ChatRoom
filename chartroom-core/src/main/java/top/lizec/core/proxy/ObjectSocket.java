@@ -15,6 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import top.lizec.core.entity.LSTPEntityRequest;
 import top.lizec.core.entity.LSTPEntityResponse;
+import top.lizec.core.exception.NameNotGetException;
 import top.lizec.core.exception.UserLogoutException;
 import top.lizec.core.security.CertManager;
 import top.lizec.core.security.KeyCalculator;
@@ -136,7 +137,7 @@ public class ObjectSocket {
                 LSTPEntityResponse response = LSTPEntityResponse.parseFrom(readUTF());
                 clientName = mapper.readValue(response.getBody(), String.class);
             } catch (Exception e) {
-                System.err.println("获取连接名称失败");
+                throw new NameNotGetException("获取连接名称失败");
             }
         }
 

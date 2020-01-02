@@ -1,5 +1,6 @@
 package top.lizec.core.proxy;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.cglib.proxy.Enhancer;
@@ -9,7 +10,11 @@ import net.sf.cglib.proxy.MethodProxy;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import top.lizec.core.annotation.GetMapping;
 import top.lizec.core.entity.LSTPEntityRequest;
@@ -43,11 +48,26 @@ public class RequestProxy implements MethodInterceptor {
                 String result = socket.readUTF();
 
                 LSTPEntityResponse response = LSTPEntityResponse.parseFrom(result);
-                return mapper.readValue(response.getBody(), method.getReturnType());
+
+                return decodeReturnValue(method, response);
             }
         }
         System.out.println("do RequestProxy");
 
         return methodProxy.invokeSuper(o, objects);
     }
+
+    private Object decodeReturnValue(Method method, LSTPEntityResponse response) throws Throwable {
+        if (method.getReturnType().getTypeName().equals(List.class.getTypeName())) {
+            Type genericReturnType = method.getGenericReturnType();
+            Type t = ((ParameterizedType) (genericReturnType)).getActualTypeArguments()[0];
+            JavaType javaType = mapper.getTypeFactory().constructParametricType(ArrayList.class, (Class) t);
+            return mapper.readValue(response.getBody(), javaType);
+        } else {
+            return mapper.readValue(response.getBody(), method.getReturnType());
+        }
+
+    }
+
+
 }

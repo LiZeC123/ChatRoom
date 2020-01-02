@@ -46,9 +46,9 @@ public class LSTPReceive {
     private void oneLoop() throws Exception {
         String info = socket.readUTF();
         LSTPEntityRequest request = LSTPEntityRequest.parseFrom(info);
-        System.out.println("Receive Request " + request.getPath());
 
         if (receiver.containsKey(request.getPath())) {
+            System.out.println("Receive Request " + request.getPath());
             Object ins = receiver.get(request.getPath());
             Method method = pathList.get(request.getPath());
 
@@ -56,6 +56,8 @@ public class LSTPReceive {
 
             LSTPEntityResponse response = new LSTPEntityResponse("200", mapper.writeValueAsString(result));
             socket.writeUTF(response.toString());
+        } else {
+            System.out.println("Miss The Request " + request.getPath());
         }
     }
 

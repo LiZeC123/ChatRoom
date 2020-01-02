@@ -37,7 +37,7 @@ public class LZApplication {
     private HashMap<String, String> valueList = new HashMap<>();
     private PushSocketManager manager = new PushSocketManager();
     private CertManager certManager;
-    private final Context context = new Context(automatiqueList, manager, valueList);
+    private final Context context = new Context(automatiqueList, valueList);
 
     public static void run(Class app) {
         new LZApplication().runApp(app, null);

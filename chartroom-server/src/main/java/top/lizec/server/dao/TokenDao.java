@@ -39,4 +39,12 @@ public class TokenDao {
         return userTokens.get(user.getUsername()).equals(user.getToken()) && tokenUsers.get(user.getToken()).equals(user.getUsername());
     }
 
+    public boolean checkUserToken(String username, String token) {
+        if (username == null || token == null) {
+            return false;
+        }
+
+        return token.equals(userTokens.get(username)) && username.equals(tokenUsers.get(token));
+    }
+
 }

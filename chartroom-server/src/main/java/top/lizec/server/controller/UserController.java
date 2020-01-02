@@ -5,6 +5,7 @@ import java.util.List;
 import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.GetMapping;
 import top.lizec.core.annotation.ReceiveController;
+import top.lizec.core.biz.FriendAndMessage;
 import top.lizec.core.biz.User;
 import top.lizec.server.biz.UserBiz;
 
@@ -39,7 +40,7 @@ public class UserController {
 
 
     @GetMapping("/friendList")
-    public List<String> friendList(User user) {
+    public List<FriendAndMessage> friendList(User user) {
         return userBiz.friendList(user);
     }
 

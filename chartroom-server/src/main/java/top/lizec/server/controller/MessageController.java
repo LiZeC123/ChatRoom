@@ -1,5 +1,7 @@
 package top.lizec.server.controller;
 
+import java.util.List;
+
 import top.lizec.core.annotation.Automatique;
 import top.lizec.core.annotation.GetMapping;
 import top.lizec.core.annotation.ReceiveController;
@@ -14,8 +16,13 @@ public class MessageController {
     @GetMapping("/add")
     public String addMessage(Message message) {
         System.out.println("Server Receive Message:" + message);
-        messageBiz.forward(message);
-        return "Success";
+        boolean isSuccess = messageBiz.forward(message);
+        return isSuccess ? "Success" : "Fail";
+    }
+
+    @GetMapping("/getMessageByUser")
+    public List<Message> getMessageByUser(Message message) {
+        return messageBiz.getMessageFor(message);
     }
 
 }

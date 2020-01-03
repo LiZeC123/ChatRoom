@@ -25,19 +25,21 @@ public class MessageBiz {
     public boolean forward(Message message) {
         message.setToken(null); // token不能转发
 
-        // 1. 尝试给自己发送消息, 如果不能成功则抛弃这条消息（发送端已经下线）
         try {
+            // 1. 尝试给自己发送消息
             messagePush.pushTo(message, message.getUsername());
+            // 2. 如果发送成功 则保存到数据库
             messageDao.insert(new MessageR(message));
         } catch (UserLogoutException | MessageNotSendException e) {
+            // 3. 否则抛弃这条消息（发送端已经下线）
             return false;
         }
 
-        // 2. 尝试给接受者发送消息
+        // 4. 尝试给接受者发送消息
         try {
             messagePush.pushTo(message, message.getReceiver());
         } catch (UserLogoutException | MessageNotSendException e) {
-            // 如果不能发送, 则保存消息等以后发送
+            //5. 如果不能发送, 则保存消息等以后发送
             return false;
         }
 

@@ -28,7 +28,7 @@ public class MainController implements Initializable {
     private Context context;
     private User thisUser;
     private MessagePool pool;
-    private FriendAndMessage currentSelectedUser;
+    //private FriendAndMessage currentSelectedUser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -40,8 +40,14 @@ public class MainController implements Initializable {
             // 如果是刷新列表触发的事件 那么oldValue就是之前选中的项目
             updateMessageList(oldValue.getFriendName());
         } else {
-            currentSelectedUser = newValue;
             // 否则是更换选择项目触发的事件
+            pool.updateCurrentUser(newValue);
+            newValue.cleanCount(); // 清除未读消息计数
+            // 更新用户列表 去除未读消息标记
+            ObservableList<FriendAndMessage> friendList = FXCollections.observableArrayList();
+            friendList.addAll(pool.getNewFriendList());
+            updateFriendList(friendList);
+
             updateMessageList(newValue.getFriendName());
         }
     };
@@ -108,8 +114,8 @@ public class MainController implements Initializable {
 
 
     public void sendButtonClick(ActionEvent actionEvent) {
-        if (currentSelectedUser != null) {
-            String receiver = currentSelectedUser.getFriendName();
+        if (pool.getCurrentUser() != null) {
+            String receiver = pool.getCurrentUser().getFriendName();
             String content = txt_send_message.getText();
             txt_send_message.setText("");
             Message message = new Message(thisUser.getUsername(), thisUser.getToken(), content, receiver);

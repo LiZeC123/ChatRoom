@@ -25,6 +25,7 @@ public class MessagePool {
 
     private HashMap<String, List<Message>> messageMap;
     private List<FriendAndMessage> friendList;
+    private FriendAndMessage currentUser;
 
     public MessagePool() {
         try {
@@ -45,7 +46,7 @@ public class MessagePool {
         return (T) in.readObject();
     }
 
-    public void addMessage(String name, Message message) {
+    public void addMessage(String name, Message message, boolean isSelf) {
         if (!messageMap.containsKey(name)) {
             messageMap.put(name, new ArrayList<>());
         }
@@ -55,12 +56,24 @@ public class MessagePool {
 
 
         if (var.isPresent()) {
-            var.get().setContent(message.getContent());
+            FriendAndMessage item = var.get();
+            item.setContent(message.getContent());
+            // 自己的消息不计数, 当前用户的消息不计数
+            if (!isSelf && !name.equals(currentUser.getFriendName())) {
+                item.incCount();
+            }
         } else {
             friendList.add(new FriendAndMessage(name, message.getContent()));
         }
     }
 
+    public void updateCurrentUser(FriendAndMessage currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public FriendAndMessage getCurrentUser() {
+        return currentUser;
+    }
 
     public void updateFriendList(List<FriendAndMessage> friends) {
         friends.forEach(friend -> {

@@ -23,9 +23,9 @@ public class PushMessageReceive {
         System.out.println("Client Receive Message:" + message);
         if (message.getUsername().equals(context.getValueByName("name"))) {
             // 自己的消息需要翻转一下对象
-            messagePool.addMessage(message.getReceiver(), message);
+            messagePool.addMessage(message.getReceiver(), message, true);
         } else {
-            messagePool.addMessage(message.getUsername(), message);
+            messagePool.addMessage(message.getUsername(), message, false);
         }
 
 

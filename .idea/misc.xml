@@ -9,6 +9,7 @@
     </list>
     <writeAnnotations>
       <writeAnnotation name="top.lizec.core.annotation.Automatique" />
+      <writeAnnotation name="javafx.fxml.FXML" />
     </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />

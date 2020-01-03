@@ -11,7 +11,7 @@ public class ListViewCell extends ListCell<FriendAndMessage> {
         super.updateItem(item, empty);
         if (item != null) {
             UserItem userItem = new UserItem();
-            userItem.setInfo(item.getFriendName(), item.getContent());
+            userItem.setInfo(item.getFriendName(), item.getContent(), item.getUnreadCount());
             setGraphic(userItem.getPane());
         }
     }

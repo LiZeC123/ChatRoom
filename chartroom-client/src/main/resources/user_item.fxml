@@ -17,7 +17,7 @@
         </clip>
     </ImageView>
     <Label fx:id="username_label" layoutX="50.0" maxHeight="150.0" maxWidth="150.0"
-           minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0"
+           minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="130.0"
            text="Label">
         <font>
             <Font size="14.0"/>
@@ -25,9 +25,10 @@
     </Label>
     <Label fx:id="user_message_label" layoutX="50.0" layoutY="25.0" maxHeight="150.0"
            maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
-           prefWidth="150.0" text="Label">
+           prefWidth="130.0" text="Label">
         <font>
             <Font size="10.0"/>
         </font>
     </Label>
+    <Label fx:id="user_message_count" layoutX="157.0" layoutY="18.0" text="99+"/>
 </AnchorPane>

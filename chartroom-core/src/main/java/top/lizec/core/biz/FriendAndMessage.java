@@ -1,6 +1,9 @@
 package top.lizec.core.biz;
 
-public class FriendAndMessage {
+import java.io.Serializable;
+
+public class FriendAndMessage implements Serializable {
+    private static final long serialVersionUID = -1526986696217487186L;
     private String friendName;
     private String content;
     private Integer unreadCount;

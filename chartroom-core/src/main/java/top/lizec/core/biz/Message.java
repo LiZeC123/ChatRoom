@@ -1,6 +1,9 @@
 package top.lizec.core.biz;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
+    private static final long serialVersionUID = -1278495680803802349L;
     private String username;
     private String token;
     private String content;

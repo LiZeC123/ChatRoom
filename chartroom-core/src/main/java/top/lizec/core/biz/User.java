@@ -2,8 +2,11 @@ package top.lizec.core.biz;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = -4778107023130172427L;
     private String username;
     private String password;
     private String token;

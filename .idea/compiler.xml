@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="chartroom-core" />
-        <module name="chartroom-server" />
-        <module name="chartroom-client" />
-        <module name="chartroom-key" />
-        <module name="chartroom-test-tool" />
+        <module name="chatroom-test-tool" />
+        <module name="chatroom-client" />
+        <module name="chatroom-server" />
+        <module name="chatroom-key" />
+        <module name="chatroom-core" />
       </profile>
     </annotationProcessing>
   </component>

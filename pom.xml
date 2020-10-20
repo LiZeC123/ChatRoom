@@ -5,15 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>top.lizec</groupId>
-    <artifactId>chartroom</artifactId>
+    <artifactId>chatroom</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>chartroom-server</module>
-        <module>chartroom-client</module>
-        <module>chartroom-core</module>
-        <module>chartroom-test-tool</module>
-        <module>chartroom-key</module>
+        <module>chatroom-server</module>
+        <module>chatroom-client</module>
+        <module>chatroom-core</module>
+        <module>chatroom-test-tool</module>
+        <module>chatroom-key</module>
     </modules>
 
 

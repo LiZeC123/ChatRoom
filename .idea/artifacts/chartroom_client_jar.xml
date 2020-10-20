@@ -3,11 +3,11 @@
     <output-path>$PROJECT_DIR$/out/artifacts/chartroom_client_jar</output-path>
     <root id="archive" name="chartroom-client.jar">
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/chartroom-client/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/chatroom-client/META-INF/MANIFEST.MF" />
       </element>
-      <element id="module-output" name="chartroom-client" />
-      <element id="module-output" name="chartroom-core" />
-      <element id="module-output" name="chartroom-key" />
+      <element id="module-output" name="chatroom-client" />
+      <element id="module-output" name="chatroom-core" />
+      <element id="module-output" name="chatroom-key" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.10.1/jackson-databind-2.10.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.10.1/jackson-core-2.10.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/guava/guava/20.0/guava-20.0.jar" path-in-jar="/" />
